@@ -16,3 +16,4 @@ The purpose of this project is to practice implemention of more advanced data st
 ## Weekly progress reports
 
 * [Week 1](./documentation/weekly_report_week_1.md)
+* [Week 2](./documentation/weekly_report_week_2.md)
