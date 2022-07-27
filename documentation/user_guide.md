@@ -26,11 +26,21 @@ poetry run invoke start
 
 ### Testing
 
-To be added
+Tests can be run with the following command: 
+
+```bash
+poetry run invoke test
+```
 
 ### Test coverage 
 
-To be added
+An HTML-format test coverage report can be generated with the following command:
+
+```bash
+poetry run invoke coverage-report
+```
+
+The report is generated in the _htmlcov_ folder.
 
 ### Pylint
 
