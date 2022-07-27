@@ -1,5 +1,9 @@
 # Data Structures and Algorithms Lab: Verbum Reprehendo
 
+![GitHub Actions](https://github.com/katriryt/Tiralabra-2022-VerbumReprehendo/workflows/CI/badge.svg)
+
+[![codecov](https://codecov.io/gh/katriryt/Tiralabra-2022-VerbumReprehendo/branch/main/graph/badge.svg?token=2QWJAKX877)](https://codecov.io/gh/katriryt/Tiralabra-2022-VerbumReprehendo)
+
 ## Introduction
 
 The purpose of this project is to practice implemention of more advanced data structures and algorithms from scratch. **Verbum Reprehendo**, a spell checker for the most common English words, takes advantage of trie, a digital tree data structure, and Damerau-Levehnstein distance in its implementation.
