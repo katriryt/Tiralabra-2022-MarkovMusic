@@ -2,7 +2,7 @@
 
 ## Introduction 
 
-Application requires using Python ^3.10.
+Application requires using Python ^3.8.
 
 ## Installing the application 
 
@@ -18,7 +18,11 @@ Please see the relevant commands below.
 
 ### Running the application 
 
-To be added
+Start the application with the following command: 
+
+```bash
+poetry run invoke start
+```
 
 ### Testing
 
@@ -30,11 +34,17 @@ To be added
 
 ### Pylint
 
-To be added
+Checks as defined by .pylintrc can be implemented with the following command: 
+```bash
+poetry run invoke lint
+```
 
 ### autopep8 formatting
 
-To be added
+Formats code according to pep8 standard: 
+```bash
+poetry run invoke format
+```
 
 ## Using the application
 

@@ -1,5 +1,6 @@
 from services.spell_check import SpellCheck
 
+
 class UI:
     def __init__(self):
         #        print("initiating ui class")
