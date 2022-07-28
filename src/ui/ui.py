@@ -2,6 +2,9 @@ from services.spell_check import SpellCheck
 
 
 class UI:
+    """Class starts the application and provides methods for interacting
+    with the user.
+    """
     def __init__(self):
         #        print("initiating ui class")
         self.check_spelling = SpellCheck()

@@ -1,8 +1,15 @@
 class SpellCheck:
-    #    def __init__(self):
-    #        pass
+    """Class provides core functionalities for spellchecking.
+    """
+    #def __init__(self):
+    #    pass
 
     def convert_user_input_as_list(self, user_input):
+        """Method converts given user input into a list.
+
+        Args:
+             user_input (string): Input is one or multiple words in string format.
+        """
         # Need to add separation of commas and points here or somewhere else
         #        print(f"starting to convert user inputs to a list {user_input}")
         user_input_as_list = list(user_input.lower().split())
@@ -14,7 +21,7 @@ class SpellCheck:
         are one Damerau-Levenhstein distance away.
 
         Args:
-            input_word (_type_): A word written by the user (string).
+            input_word (string): A word written by the user (string).
         """
 
 #        print(f"starting to generate alternative words. given word was: {test_word}")
