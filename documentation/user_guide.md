@@ -18,7 +18,12 @@ Please see the relevant commands below.
 
 ### Running the application 
 
-Start the application with the following command: 
+Start the application with the following command in Windows: 
+
+```bash
+python src/index.py
+```
+Please use the following command in Linux:
 
 ```bash
 poetry run invoke start
