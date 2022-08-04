@@ -1,8 +1,25 @@
+from repositories.trie import trie as default_trie
+from repositories.db_utilities import english_dictionary as default_english_dictionary
+
+
 class SpellCheck:
     """Class provides core functionalities for spellchecking.
     """
-    #def __init__(self):
-    #    pass
+
+    def __init__(self, trie=default_trie, dictionary=default_english_dictionary):
+        """Method initializes the spell checker, the related trie
+            data structure, and the English dictionary
+
+            Args:
+                trie (Class, optional): Trie data structure populated with English
+                words. Defaults to default_trie.
+                dictionary (Class, optional): Class opens data file with English
+                dictionary and populates the trie structure. Defaults to default_english_dictionary.
+        """
+
+#        print("initializing spell checker")
+        self.trie = trie
+        self.dictionary = dictionary
 
     def convert_user_input_as_list(self, user_input):
         """Method converts given user input into a list.
@@ -15,6 +32,17 @@ class SpellCheck:
         user_input_as_list = list(user_input.lower().split())
 #        print(user_input_as_list)
         return user_input_as_list
+
+    def is_word_english(self, test_word):
+        """Method returns whether the given word is English or not.
+
+           Args:
+                test_word (string): Word input by user (string).
+            Returns:
+                Boolean: Method returns whether the given word is English (True) or not (False).
+        """
+
+        return self.trie.search_if_word_in_trie(test_word)
 
     def alternative_words_with_one_distance(self, test_word):
         """For a given input_word, the method generates all the alternative words that
@@ -57,3 +85,22 @@ class SpellCheck:
 #        print(alternative_words_generated)
 #        print(len(alternative_words_generated))
         return alternative_words_generated
+
+    def alternative_words_in_english(self, test_word):
+        """Method generates alternative words, and returns which ones of them are English.
+
+            Args:
+                test_word (string): A word written by the user (string).
+
+            Returns:
+                List: Method returns a list of alternative English words
+        """
+        all_alternative_words = self.alternative_words_with_one_distance(
+            test_word)
+        alternative_english_words = []
+
+        for word in all_alternative_words:
+            if self.trie.search_if_word_in_trie(word) is True:
+                alternative_english_words.append(word)
+
+        return alternative_english_words

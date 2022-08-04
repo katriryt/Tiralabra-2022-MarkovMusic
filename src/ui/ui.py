@@ -5,8 +5,9 @@ class UI:
     """Class starts the application and provides methods for interacting
     with the user.
     """
+
     def __init__(self):
-        #        print("initiating ui class")
+        print("initiating ui class")
         self.check_spelling = SpellCheck()
 
     def start(self):
@@ -20,8 +21,18 @@ class UI:
 #        print(user_input_as_list)
 
         for word in user_input_as_list:
-            print(f"Here are alternative ways to spell your word: {word}")
-            outputs = self.check_spelling.alternative_words_with_one_distance(
-                word)
-            print(f"There are {len(outputs)} to write your word")
-            print(outputs)
+            #            answer = self.check_spelling.is_word_english(word)
+            if self.check_spelling.is_word_english(word) is True:
+                #                print(f"Your word: {word} is English {answer}")
+                print(f"Your word: {word} is English")
+            else:
+                #                print(f"Your word: {word} is not English {answer}")
+                print(f"Your word: {word} is not English")
+#            for word in user_input_as_list:
+                print(
+                    f"Here are alternative ways to spell your word {word} in English")
+                outputs = self.check_spelling.alternative_words_in_english(
+                    word)
+                print(
+                    f"There are {len(outputs)} ways to write your word in English")
+                print(outputs)
