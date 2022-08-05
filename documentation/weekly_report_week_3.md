@@ -46,4 +46,4 @@ Other tasks during next week include
 
 ## Working hours during the week
 
-During this week I worked ~XX hours in the project.
+During this week I worked ~24 hours for the project (stretch targets from week 4 done as well).
