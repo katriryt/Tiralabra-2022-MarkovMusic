@@ -14,10 +14,11 @@ The purpose of this project is to practice implemention of more advanced data st
 
 * [Project specification document](./documentation/project_specification.md)
 * Implementation document (first draft available latest as of week 4)
-* Testing document (first draft available latest as of week 3)
+* [Testing document](./documentation/testing_document.md)
 * [User guide](./documentation/user_guide.md) (Note: comments to the code on e.g. methods will be done using Python Docstring)
 
 ## Weekly progress reports
 
 * [Week 1](./documentation/weekly_report_week_1.md)
 * [Week 2](./documentation/weekly_report_week_2.md)
+* [Week 3](./documentation/weekly_report_week_3.md)
