@@ -39,10 +39,10 @@ class TestTrie(unittest.TestCase):
         wanted_answer = False
         self.assertEqual(answer, wanted_answer)
 
-    def test_search_alternative_spellings_for_word(self):
+    def test_search_words_starting_with(self):
         word_list = ["abandon", "ability", "able", "about", "ab"]
         self.test_trie.insert_multiple_words_in_trie(word_list)
-        answer = self.test_trie.search_alternative_spellings_for_word("ab")
+        answer = self.test_trie.search_words_starting_with("ab")
         wanted_answer = ["ab", "abandon", "ability", "able", "about"]
         self.assertEqual(answer, wanted_answer)
 
@@ -60,3 +60,38 @@ class TestTrie(unittest.TestCase):
         output = self.test_trie.search_word_full_data("ability")
         wanted_answer = (True, "ability", 4)
         self.assertEqual(output, wanted_answer)
+
+    def test_get_all_words_only_words(self):
+        word_list = ["abandon", "ability", "able", "about",
+                     "ab", "pizza", "jones", "manual", "man"]
+        self.test_trie.insert_multiple_words_in_trie(word_list)
+        response = self.test_trie.get_all_words()
+        self.assertEqual(sorted(response), sorted(word_list))
+
+    def test_get_all_words_all_data(self):
+        word_list = ["abandon", "ability", "able", "about",
+                     "ab", "pizza", "jones", "manual", "man"]
+        self.test_trie.insert_multiple_words_in_trie(word_list)
+        response = self.test_trie.get_all_words(True)
+        wanted_answer = []
+        for word in word_list:
+            wanted_answer.append((True, word, 1, len(word)))
+        self.assertEqual(sorted(response), sorted(wanted_answer))
+
+    def test_get_all_words_length_available(self):
+        word_list = ["abandon", "ability", "able", "about",
+                     "ab", "pizza", "jones", "manual", "man"]
+        self.test_trie.insert_multiple_words_in_trie(word_list)
+        original_word_length = 5
+        response = self.test_trie.get_all_words(True, original_word_length)
+        wanted_answer = 5
+        self.assertEqual(len(response), 5)
+
+    def test_get_all_words_length_not_available(self):
+        word_list = ["abandon", "ability", "able", "about",
+                     "ab", "pizza", "jones", "manual", "man"]
+        self.test_trie.insert_multiple_words_in_trie(word_list)
+        original_word_length = 10
+        response = self.test_trie.get_all_words(True, original_word_length)
+        wanted_answer = 0
+        self.assertEqual(len(response), wanted_answer)

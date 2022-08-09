@@ -110,7 +110,6 @@ class SpellCheck:
 
         return alternative_english_words
 
-
     def generate_matrix(self, user_word_length, dictionary_word_length):
         """Method generates a distance matrix used when calculating Levenshtein
         distance and optimal string alignment distance
@@ -130,7 +129,6 @@ class SpellCheck:
         matrix = np.append(first_row, matrix, axis=0)
     #    print(matrix)
         return matrix
-
 
     def generate_damerau_leven_matrix(self, user_word_length, dictionary_word_length):
         """Method generates a distance matrix used when calculating Damerau-Levenshtein
@@ -153,7 +151,6 @@ class SpellCheck:
 
         return baseline_matrix
 
-
     def cost_heuristic_for_characters(self, character_1, character_2):
         """Method returns heuristic to estimate the distance between
         two characters. At the moment a simplistic approach is used.
@@ -168,7 +165,6 @@ class SpellCheck:
         else:
             return 1
 
-
     def calculate_levenshtein_distance(self, user_word, dictionary_word):
         """Method calculates Levenshtein distance between two words, which allows
         insertions, deletions, and symbol substitutions to transform from
@@ -179,7 +175,8 @@ class SpellCheck:
             dictionary_word (string): Word taken from dictionary
         """
     #    print("calculating levenshtein distance, full matrix")
-        distance_matrix = self.generate_matrix(len(user_word), len(dictionary_word))
+        distance_matrix = self.generate_matrix(
+            len(user_word), len(dictionary_word))
     #    print(distance_matrix)
 
         for i in range(1, len(user_word)+1):
@@ -197,10 +194,10 @@ class SpellCheck:
                                             (distance_matrix[i-1][j-1]+distance))
 
     #    print(distance_matrix)
-        shortest_distance = distance_matrix[len(user_word), len(dictionary_word)]
+        shortest_distance = distance_matrix[len(
+            user_word), len(dictionary_word)]
     #    print(shortest_distance)
         return shortest_distance
-
 
     def calculate_optimal_string_alignment_distance(self, user_word, dictionary_word):
         """Method calculates optimal string alignment distance between two words, which allows
@@ -214,7 +211,8 @@ class SpellCheck:
             dictionary_word (string): Word taken from dictionary
         """
     #    print("calculating optimal string alignment distance, full matrix")
-        distance_matrix = self.generate_matrix(len(user_word), len(dictionary_word))
+        distance_matrix = self.generate_matrix(
+            len(user_word), len(dictionary_word))
     #    print(distance_matrix)
 
         for i in range(1, len(user_word)+1):  # ottaa riveittäin
@@ -239,10 +237,10 @@ class SpellCheck:
     #                print(distance_matrix)
 
     #    print(distance_matrix)
-        shortest_distance = distance_matrix[len(user_word), len(dictionary_word)]
+        shortest_distance = distance_matrix[len(
+            user_word), len(dictionary_word)]
     #    print(shortest_distance)
         return shortest_distance
-
 
     def generate_baseline_row_for_characters(self):
         """Method generates a dictionary that shows for each English character,
@@ -257,7 +255,6 @@ class SpellCheck:
         baseline_row_for_characters["_"] = 0
 
         return baseline_row_for_characters
-
 
     def calculate_damerau_levenshtein_distance(self, user_word, dictionary_word):
         """Method calculates Damerau-Levenshtein distance between two words, which allows

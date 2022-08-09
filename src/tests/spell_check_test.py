@@ -40,36 +40,42 @@ class TestSpellCheck(unittest.TestCase):
         self.assertEqual(output, wanted_answer)
 
     def test_calculate_levenshtein_distance_words_same_length(self):
-        test_user_word = "intention" 
+        test_user_word = "intention"
         test_dictionary_word = "execution"
-        output = self.check_spelling.calculate_levenshtein_distance(test_user_word, test_dictionary_word)
+        output = self.check_spelling.calculate_levenshtein_distance(
+            test_user_word, test_dictionary_word)
         wanted_answer = 5
         self.assertEqual(output, wanted_answer)
 
     def test_calculate_levenshtein_distance_words_different_length(self):
-        test_user_word = "sunday" 
+        test_user_word = "sunday"
         test_dictionary_word = "saturday"
-        output = self.check_spelling.calculate_levenshtein_distance(test_user_word, test_dictionary_word)
+        output = self.check_spelling.calculate_levenshtein_distance(
+            test_user_word, test_dictionary_word)
         wanted_answer = 3
         self.assertEqual(output, wanted_answer)
 
     def test_calculate_optimal_string_alignment_distance(self):
         test_user_word = "a_cat"
         test_dictionary_word = "an_act"
-        output = self.check_spelling.calculate_optimal_string_alignment_distance(test_user_word, test_dictionary_word)
+        output = self.check_spelling.calculate_optimal_string_alignment_distance(
+            test_user_word, test_dictionary_word)
         wanted_answer = 2
         self.assertEqual(output, wanted_answer)
 
     def test_calculate_damerau_levenshtein_distance(self):
         test_user_word = "a_cat"
         test_dictionary_word = "an_act"
-        output = self.check_spelling.calculate_damerau_levenshtein_distance(test_user_word, test_dictionary_word)
+        output = self.check_spelling.calculate_damerau_levenshtein_distance(
+            test_user_word, test_dictionary_word)
         wanted_answer = 2
         self.assertEqual(output, wanted_answer)
 
     def test_generate_damerau_levenshtein_distance_differs_optimal_string(self):
         test_user_word = "ca"
         test_dictionary_word = "abc"
-        output_osa = self.check_spelling.calculate_optimal_string_alignment_distance(test_user_word, test_dictionary_word)
-        output_dl = self.check_spelling.calculate_damerau_levenshtein_distance(test_user_word, test_dictionary_word)
-        self.assertEqual((output_osa, output_dl), (3,2))
+        output_osa = self.check_spelling.calculate_optimal_string_alignment_distance(
+            test_user_word, test_dictionary_word)
+        output_dl = self.check_spelling.calculate_damerau_levenshtein_distance(
+            test_user_word, test_dictionary_word)
+        self.assertEqual((output_osa, output_dl), (3, 2))
