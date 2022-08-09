@@ -89,7 +89,7 @@ class Trie:
                 #                print("selecting word, lisäämässä kaikkea tietoa listalle")
                 self.all_words.append(
                     (node.node_is_end_of_word, node.word_in_node, node.word_count,
-                    node.word_length))
+                     node.word_length))
 
         elif (original_word_length is not None) and ((node.word_length == original_word_length) or (node.word_length == original_word_length+accepted_distance_from_original_word) or (node.word_length == original_word_length-accepted_distance_from_original_word)):
             #            print(f"length within parameters {accepted_distance_from_original_word}")
@@ -100,7 +100,7 @@ class Trie:
                 #                print("selecting word, lisäämässä kaikkea tietoa listalle")
                 self.all_words.append(
                     (node.node_is_end_of_word, node.word_in_node, node.word_count,
-                    node.word_length))
+                     node.word_length))
 
 #        else:
 #            print("requirements not met")
@@ -131,7 +131,7 @@ class Trie:
                 child, previous_node + node.character, data_wanted, original_word_length)
 
     def search_words_starting_with(self, given_string, data_wanted=False,
-                                    original_word_length=None):
+                                   original_word_length=None):
         """Method searches for all the words that start with the given string from the trie
         data structure. It returns a list of the words starting with the given string.
 

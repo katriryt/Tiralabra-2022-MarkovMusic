@@ -1,4 +1,5 @@
 import string
+import re
 import numpy as np
 from repositories.trie import trie as default_trie
 from repositories.db_utilities import english_dictionary as default_english_dictionary
@@ -27,14 +28,16 @@ class SpellCheck:
         self.dictionary = dictionary
 
     def convert_user_input_as_list(self, user_input):
-        """Method converts given user input into a list.
+        """Method converts given user input into a list of strings in lower case,
+        splitting the user input to words at empty spaces and different punctuation marks.
 
         Args:
              user_input (string): Input is one or multiple words in string format.
         """
         # Need to add separation of commas and points here or somewhere else
         #        print(f"starting to convert user inputs to a list {user_input}")
-        user_input_as_list = list(user_input.lower().split())
+#        user_input_as_list = list(user_input.lower().split())
+        user_input_as_list = re.findall(r"[\w']+", user_input.lower())
 #        print(user_input_as_list)
         return user_input_as_list
 
@@ -278,9 +281,9 @@ class SpellCheck:
             #        print(user_word[i-2])
             latest_column_for_character = 0
             for j in range(2, len(dictionary_word)+2):
-                #            print(f"Verrataan kirjaimia: {user_word[i-2]} ja {dictionary_word[j-2]}")
-                #            print(user_word[i-2])
-                #            print(dictionary_word[j-2])
+                #print(f"Verrataan kirjaimia: {user_word[i-2]} ja {dictionary_word[j-2]}")
+                #print(user_word[i-2])
+                #print(dictionary_word[j-2])
                 last_matching_row = latest_row_for_character[dictionary_word[j-2]]
     #            print(f"last matching row on: {last_matching_row}")
                 last_matching_column = latest_column_for_character
@@ -307,3 +310,50 @@ class SpellCheck:
     #        print(distance_matrix)
 
         return distance_matrix[-1][-1]
+
+    def suggest_words_based_on_distance(self, given_user_word, indicator_for_metric=3):
+        """Method identifies all the words in the English dictionary (trie data structure)
+        that are within +/-1 character length from the word given by the user,
+        calculates their distance to the user word, and suggests the ones with the
+        shortest distance.
+
+        Args:
+            given_user_word (string): Word written by the user.
+            indicator_for_metric (int, optional): Indicates which distance metric is
+            to be used in the distance calculation. Defaults to 3 (Damerau-Levenshtein).
+        """
+#        print(f"Suggestions wanted for: {given_user_word}")
+        suggestions = []
+        suggestions_dict = {}
+        shortest_distance = 2*len(given_user_word)
+#        print(shortest_distance)
+
+        alternatives_from_dictionary = self.trie.get_all_words(
+            False, len(given_user_word))
+#        print(alternatives_from_dictionary)
+        for dictionary_word in alternatives_from_dictionary:
+            #            print(dictionary_word)
+            if indicator_for_metric == 1:
+                #                print("Levenhstein distance used")
+                distance = self.calculate_levenshtein_distance(
+                    given_user_word, dictionary_word)
+            elif indicator_for_metric == 2:
+                #                print("Optimal string alignment metric used")
+                distance = self.calculate_optimal_string_alignment_distance(
+                    given_user_word, dictionary_word)
+            else:
+                #                print("Damerau-Levenshtein metric used")
+                distance = self.calculate_damerau_levenshtein_distance(
+                    given_user_word, dictionary_word)
+
+            suggestions.append((dictionary_word, distance))
+            if distance <= shortest_distance:
+                shortest_distance = distance
+                if distance not in suggestions_dict:
+                    suggestions_dict[distance] = [dictionary_word]
+                else:
+                    suggestions_dict[distance].append(dictionary_word)
+    #            print(suggestions_dict)
+
+#        print(f"this is the full list of suggestions: {suggestions}")
+        return (shortest_distance, suggestions_dict[shortest_distance])

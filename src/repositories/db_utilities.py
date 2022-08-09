@@ -23,11 +23,16 @@ class EnglishDictionary:
         return file_location
 
     def _populate_trie_based_on_file(self):
+        """Method populates trie with the words from English dictionary that
+        only contain English alphabets e.g. words with numbers are excluded.
+        """
         #        print("getting words")
         with open(self.file_name) as given_file:
             contents = given_file.readlines()
+            # This row may be limited during testing [600:900]
             for row in contents:
-                self.trie.insert_nodes(row.strip())
+                if row.strip().isalpha() is True:
+                    self.trie.insert_nodes(row.strip())
 #        print("words saved")
 
 
