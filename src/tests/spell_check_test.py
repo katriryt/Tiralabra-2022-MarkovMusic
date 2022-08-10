@@ -12,6 +12,12 @@ class TestSpellCheck(unittest.TestCase):
         wanted_answer = ["mom", "eats", "food"]
         self.assertEqual(output, wanted_answer)
 
+    def test_convert_user_input_as_list(self):
+        user_input = "Mom! BUI123 sur.prise"
+        output = self.check_spelling.convert_user_input_as_list(user_input)
+        wanted_answer = ["mom", "bui123", "sur", "prise"]
+        self.assertEqual(output, wanted_answer)
+
     def test_is_word_english_true(self):
         user_input = "mom"
         output = self.check_spelling.is_word_english(user_input)
