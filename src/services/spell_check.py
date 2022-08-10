@@ -282,8 +282,8 @@ class SpellCheck:
             latest_column_for_character = 0
             for j in range(2, len(dictionary_word)+2):
                 #print(f"Verrataan kirjaimia: {user_word[i-2]} ja {dictionary_word[j-2]}")
-                #print(user_word[i-2])
-                #print(dictionary_word[j-2])
+                # print(user_word[i-2])
+                # print(dictionary_word[j-2])
                 last_matching_row = latest_row_for_character[dictionary_word[j-2]]
     #            print(f"last matching row on: {last_matching_row}")
                 last_matching_column = latest_column_for_character
