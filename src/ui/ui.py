@@ -20,7 +20,7 @@ class UI:
     def request_input_for_spell_checking(self):
         """Method requests for user inputs and changes it for spell checking.
         """
-        user_input = str(input("Please type in your text (please limit to one word) to be checked:"))
+        user_input = str(input("Please type in your text to be checked:"))
         #print(user_input)
         self.full_original_user_input = self.check_spelling.convert_original_user_input_as_list(user_input)
 #        print(self.full_original_user_input)
@@ -30,21 +30,19 @@ class UI:
         print("")
 
     def print_results_from_spell_checking(self):
+        """Method checks whether the word is in English dictionary, and if not 
+        """
         for word in self.user_input_as_list:
             if self.check_spelling.is_word_english(word) is True:
-                print(f"Your word: {word} is English")
-                print("")
+                print(f"Your word: {word} is found from the English dictionary and is correctly spelled\n")
             else:
-                print(f"Your word: {word} is not English")
-                print("")
                 if word.isalpha() is False:
                     print(
-                        f"Please note that your word {word} does not consist of alphabets and is not checked")
-                    print("")
+                        f"Please note that your word {word} does not consist of alphabets and cannot be checked\n")
                 else:
+                    print(f"Your word: {word} is not found from the English dictionary\n")
                     print(
-                        f"Here are alternative ways to spell your word {word} in English")
-                    print("")
+                        f"Here are alternative ways to spell your word {word} in English\n")
                     print(
                         f"Option 1: Simplistic method generating words with one Damerau-Levenshtein distance")
                     outputs = self.check_spelling.alternative_words_in_english(
@@ -53,30 +51,19 @@ class UI:
                         f"There are {len(outputs)} ways to write your word in English")
                     print(outputs)
                     print("")
-                    print(
-                        f"Option 2: All words from dictionary based on Levenshtein distance")
-                    output2 = self.check_spelling.suggest_words_based_on_distance(
-                        word, 1)
-                    print(
-                        f"Shortest distance found was {output2[0]}. There are {len(output2[1])} ways to write your word in English")
-                    print(output2[1])
-                    print("")
-                    print(
-                        f"Option 3: All words from dictionary based on Optimal string alignment distance")
-                    output3 = self.check_spelling.suggest_words_based_on_distance(
-                        word, 2)
-                    print(
-                        f"Shortest distance found was {output3[0]}. There are {len(output3[1])} ways to write your word in English")
-                    print(output3[1])
-                    print("")
-                    print(
-                        f"Option 4: All words from dictionary based on Damerau-Levenshtein distance")
-                    output4 = self.check_spelling.suggest_words_based_on_distance(
-                        word, 3)
-                    print(
-                        f"Shortest distance found was {output4[0]}. There are {len(output4[1])} ways to write your word in English")
-                    print(output4[1])
-                    print("")
+                    for metric_selector in range (1, 4):
+                        if metric_selector == 1:
+                            text = "Option 2: All words from dictionary based on Levenshtein distance"
+                        elif metric_selector == 2:
+                            text = "Option 3: All words from dictionary based on Optimal string alignment distance"
+                        elif metric_selector == 3:
+                            text = "Option 4: All words from dictionary based on Damerau-Levenshtein distance"
+                        print(text)
+                        output = self.check_spelling.suggest_words_based_on_distance(word, metric_selector)
+                        print(
+                            f"Shortest distance found was {output[0]}. There are {len(output[1])} ways to write your word in English")
+                        print(output[1])
+                        print("")
                     print("")
 
         self.exit_checking_continues = True
