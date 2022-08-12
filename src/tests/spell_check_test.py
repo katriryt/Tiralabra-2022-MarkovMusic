@@ -1,3 +1,4 @@
+from distutils.cygwinccompiler import Mingw32CCompiler
 import unittest
 from services.spell_check import SpellCheck
 
@@ -5,6 +6,27 @@ from services.spell_check import SpellCheck
 class TestSpellCheck(unittest.TestCase):
     def setUp(self):
         self.check_spelling = SpellCheck()
+
+    def test_word_contains_only_english_characters_true(self):
+        test_word = "mwm"
+        output = self.check_spelling.word_contains_only_english_characters(
+            test_word)
+        wanted_answer = True
+        self.assertEqual(output, wanted_answer)
+
+    def test_word_contains_only_english_characters_false(self):
+        test_word = "mäm"
+        output = self.check_spelling.word_contains_only_english_characters(
+            test_word)
+        wanted_answer = False
+        self.assertEqual(output, wanted_answer)
+
+    def test_convert_original_user_input_as_list(self):
+        user_input = "Mom! BUI123 sur.prise"
+        output = self.check_spelling.convert_original_user_input_as_list(
+            user_input)
+        wanted_answer = ["Mom!", "BUI123", "sur.prise"]
+        self.assertEqual(output, wanted_answer)
 
     def test_convert_user_input_as_list(self):
         user_input = "mom EATS food"
@@ -85,3 +107,29 @@ class TestSpellCheck(unittest.TestCase):
         output_dl = self.check_spelling.calculate_damerau_levenshtein_distance(
             test_user_word, test_dictionary_word)
         self.assertEqual((output_osa, output_dl), (3, 2))
+
+    def test_calculate_levenshtein_distance_weighting_used(self):
+        test_user_word_1 = "hiuse"
+        test_user_word_2 = "hquse"
+        test_dictionary_word = "house"
+        weighting_used = True
+        output_1 = self.check_spelling.calculate_levenshtein_distance(
+            test_user_word_1, test_dictionary_word, weighting_used)
+        output_2 = self.check_spelling.calculate_levenshtein_distance(
+            test_user_word_2, test_dictionary_word, weighting_used)
+        print(output_1, output_2)
+        self.assertTrue(output_1 < output_2)
+
+    def test_suggest_words_based_on_distance(self):
+        test_word = "mwm"
+        test_weighting_used = True
+        output_levenshtein = self.check_spelling.suggest_words_based_on_distance(
+            test_word, 1, test_weighting_used)
+        output_osa = self.check_spelling.suggest_words_based_on_distance(
+            test_word, 2, test_weighting_used)
+        output_damerau_leven = self.check_spelling.suggest_words_based_on_distance(
+            test_word, 3, test_weighting_used)
+        answer = [len(output_levenshtein), len(
+            output_osa), len(output_levenshtein)]
+        wanted_number_of_suggestions = [10, 10, 10]
+        self.assertEqual(answer, wanted_number_of_suggestions)

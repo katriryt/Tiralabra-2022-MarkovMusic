@@ -3,6 +3,7 @@ import re
 import numpy as np
 from repositories.trie import trie as default_trie
 from repositories.db_utilities import english_dictionary as default_english_dictionary
+from services.heuristics import distance_heuristics as default_distance_heuristics
 
 
 class SpellCheck:
@@ -12,7 +13,8 @@ class SpellCheck:
     optimal string alignment distance, and full Damerau-Levenshtein distance.
     """
 
-    def __init__(self, trie=default_trie, dictionary=default_english_dictionary):
+    def __init__(self, trie=default_trie, dictionary=default_english_dictionary,
+        distance_heuristics=default_distance_heuristics):
         """Method initializes the spell checker, the related trie
             data structure, and the English dictionary
 
@@ -26,6 +28,25 @@ class SpellCheck:
 #        print("initializing spell checker")
         self.trie = trie
         self.dictionary = dictionary
+        self.distance_heuristics = distance_heuristics
+
+    def word_contains_only_english_characters(self, user_input):
+        """Method checks if the word contains only English characters.
+        It returns False is there are any characters that are not in
+        in the English alphabet, and True if all characters are in English alphabet.
+
+        Args:
+            user_input (string): Word from user
+
+        Returns:
+            Boolean: False if any character is not in English alphabet. True, if
+            all characters are in English alphabet.
+        """
+        allowed_characters = string.ascii_lowercase
+        for character in user_input:
+            if character not in allowed_characters:
+                return False
+        return True
 
     def convert_original_user_input_as_list(self, user_input):
         original_user_input_as_list = user_input.split()
@@ -126,7 +147,8 @@ class SpellCheck:
             dictionary_word_length (int): Length of the word taken from dictionary
         """
         baseline_matrix = np.full(
-            (user_word_length, dictionary_word_length), user_word_length+dictionary_word_length)
+            (user_word_length, dictionary_word_length), float(
+                user_word_length+dictionary_word_length))
         first_column = np.arange(1, user_word_length+1, 1)
         first_column = first_column.reshape(-1, 1)
         first_row = np.arange(0, dictionary_word_length+1, 1)
@@ -148,7 +170,8 @@ class SpellCheck:
     #    print("generating dl matric")
 
         baseline_matrix = np.full(
-            (user_word_length+2, dictionary_word_length+2), user_word_length+dictionary_word_length)
+            (user_word_length+2, dictionary_word_length+2), float(
+                user_word_length+dictionary_word_length))
     #    print(baseline_matrix)
         for i in range(1, user_word_length+2):
             baseline_matrix[i][1] = i-1
@@ -158,7 +181,7 @@ class SpellCheck:
 
         return baseline_matrix
 
-    def cost_heuristic_for_characters(self, character_1, character_2):
+    def cost_heuristic_for_characters(self, character_1, character_2, weighting=False):
         """Method returns heuristic to estimate the distance between
         two characters. At the moment a simplistic approach is used.
 
@@ -167,12 +190,15 @@ class SpellCheck:
             character_2 (string): One character
         """
     #    print(character_1, character_2)
-        if character_1 == character_2:
-            return 0
-        else:
-            return 1
 
-    def calculate_levenshtein_distance(self, user_word, dictionary_word):
+        if weighting == False:
+            return self.distance_heuristics.distance_heuristic_always_the_same(character_1,
+            character_2)
+        elif weighting == True:
+            return self.distance_heuristics.calculate_distance_heuristic_for_characters_keyboard_only(
+                character_1, character_2)
+
+    def calculate_levenshtein_distance(self, user_word, dictionary_word, weighting_used=False):
         """Method calculates Levenshtein distance between two words, which allows
         insertions, deletions, and symbol substitutions to transform from
         user word to dictionary word. Full matrix is used for illustrative purposes.
@@ -181,10 +207,11 @@ class SpellCheck:
             user_word (string): Word typed by user
             dictionary_word (string): Word taken from dictionary
         """
-    #    print("calculating levenshtein distance, full matrix")
+#        print(f"calculating levenshtein distance, full matrix, weighting_used is {weighting_used}")
+#        print(f"words are: user word is {user_word}, and dictionary word is {dictionary_word} ")
         distance_matrix = self.generate_matrix(
             len(user_word), len(dictionary_word))
-    #    print(distance_matrix)
+#        print(distance_matrix)
 
         for i in range(1, len(user_word)+1):
             #        print(f"i is {i}")
@@ -194,19 +221,20 @@ class SpellCheck:
                 #            print(distance_matrix[i][j])
                 #            print(user_word[i-1], dictionary_word[j-1])
                 distance = self.cost_heuristic_for_characters(
-                    user_word[i-1], dictionary_word[j-1])
+                    user_word[i-1], dictionary_word[j-1], weighting_used)
     #            print(distance)
                 distance_matrix[i][j] = min((distance_matrix[i-1][j]+1),
                                             (distance_matrix[i][j-1]+1),
                                             (distance_matrix[i-1][j-1]+distance))
 
-    #    print(distance_matrix)
+#        print(distance_matrix)
         shortest_distance = distance_matrix[len(
             user_word), len(dictionary_word)]
-    #    print(shortest_distance)
+#        print(shortest_distance)
         return shortest_distance
 
-    def calculate_optimal_string_alignment_distance(self, user_word, dictionary_word):
+    def calculate_optimal_string_alignment_distance(self, user_word, dictionary_word,
+        weighting_used=False):
         """Method calculates optimal string alignment distance between two words, which allows
         insertions, deletions, and symbol substitutions to transform from
         user word to dictionary word as well as transposition.
@@ -230,7 +258,7 @@ class SpellCheck:
                 #            print(distance_matrix[i][j])
                 #            print(user_word[i-1], dictionary_word[j-1])
                 distance = self.cost_heuristic_for_characters(
-                    user_word[i-1], dictionary_word[j-1])
+                    user_word[i-1], dictionary_word[j-1], weighting_used)
     #            print(distance)
                 distance_matrix[i][j] = min((distance_matrix[i-1][j]+1),
                                             (distance_matrix[i][j-1]+1),
@@ -263,7 +291,8 @@ class SpellCheck:
 
         return baseline_row_for_characters
 
-    def calculate_damerau_levenshtein_distance(self, user_word, dictionary_word):
+    def calculate_damerau_levenshtein_distance(self, user_word, dictionary_word,
+        weighting_used=False):
         """Method calculates Damerau-Levenshtein distance between two words, which allows
         insertions, deletions, and symbol substitutions to transform from
         user word to dictionary word as well as transposition.
@@ -298,7 +327,10 @@ class SpellCheck:
                     distance_cost = 0
                     latest_column_for_character = j
                 else:
-                    distance_cost = 1
+                    #                    distance_cost = 1
+                    distance_cost = self.cost_heuristic_for_characters(
+                        user_word[i-2], dictionary_word[j-2], weighting_used)
+
     #            print(i, j)
 
                 distance_matrix[i][j] = min(distance_matrix[i-1][j-1]+distance_cost,
@@ -315,7 +347,8 @@ class SpellCheck:
 
         return distance_matrix[-1][-1]
 
-    def suggest_words_based_on_distance(self, given_user_word, indicator_for_metric=3):
+    def suggest_words_based_on_distance(self, given_user_word, indicator_for_metric=3,
+        weighting_used=False):
         """Method identifies all the words in the English dictionary (trie data structure)
         that are within +/-1 character length from the word given by the user,
         calculates their distance to the user word, and suggests the ones with the
@@ -326,38 +359,48 @@ class SpellCheck:
             indicator_for_metric (int, optional): Indicates which distance metric is
             to be used in the distance calculation. Defaults to 3 (Damerau-Levenshtein).
         """
-#        print(f"Suggestions wanted for: {given_user_word}")
+#        print(f"Suggestions wanted for: {given_user_word}, weighting_used is {weighting_used}")
         suggestions = []
-        suggestions_dict = {}
-        shortest_distance = 2*len(given_user_word)
-#        print(shortest_distance)
 
         alternatives_from_dictionary = self.trie.get_all_words(
-            False, len(given_user_word))
+            True, len(given_user_word))
+
 #        print(alternatives_from_dictionary)
-        for dictionary_word in alternatives_from_dictionary:
-            #            print(dictionary_word)
+        for item in alternatives_from_dictionary:
+            dictionary_word = item[1]
+#            print(dictionary_word)
             if indicator_for_metric == 1:
                 #                print("Levenhstein distance used")
                 distance = self.calculate_levenshtein_distance(
-                    given_user_word, dictionary_word)
+                    given_user_word, dictionary_word, weighting_used)
             elif indicator_for_metric == 2:
                 #                print("Optimal string alignment metric used")
                 distance = self.calculate_optimal_string_alignment_distance(
-                    given_user_word, dictionary_word)
+                    given_user_word, dictionary_word, weighting_used)
             else:
                 #                print("Damerau-Levenshtein metric used")
                 distance = self.calculate_damerau_levenshtein_distance(
-                    given_user_word, dictionary_word)
+                    given_user_word, dictionary_word, weighting_used)
 
-            suggestions.append((dictionary_word, distance))
-            if distance <= shortest_distance:
-                shortest_distance = distance
-                if distance not in suggestions_dict:
-                    suggestions_dict[distance] = [dictionary_word]
-                else:
-                    suggestions_dict[distance].append(dictionary_word)
-    #            print(suggestions_dict)
+            frequency = item[2]
+            suggestions.append((dictionary_word, distance, frequency))
 
-#        print(f"this is the full list of suggestions: {suggestions}")
-        return (shortest_distance, suggestions_dict[shortest_distance])
+        return self.select_top_suggestions(suggestions)
+
+    def select_top_suggestions(self, all_suggestions):
+        """Method prioritizes among all suggestions identified the best suggestions
+        for the misspelled word.
+
+        Args:
+            all_suggestions (list): List contains words that are English, whose
+            length is maximum +/- one character from the misspelled word,
+            and their distance metric and frequency in the dictionary.
+        """
+        full_suggestion_list = all_suggestions
+        sorted_suggestions = sorted(
+            full_suggestion_list, key=lambda element: (element[1], -element[2]))
+        top_suggestions = sorted_suggestions[0:10]
+#        for item in sorted_suggestions[0:20]:
+#            print(item)
+#        print(top_suggestions)
+        return top_suggestions

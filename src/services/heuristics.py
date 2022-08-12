@@ -17,6 +17,9 @@ class DistanceHeuristics:
                                 ["a", "s", "d", "f", "g", "h", "j", "k", "l"],
                                 ["z", "x", "c", "v", "b", "n", "m"]]
 
+        self.all_distances = self.calculate_all_distances_between_characters()
+        self.median_for_distances = self.median_for_all_keyboard_distances()
+
     def get_keyboard_coordinates(self, wanted_character):
         """Method returns coordinates in the keyboard matrix for one requested character.
 
@@ -44,7 +47,7 @@ class DistanceHeuristics:
     #    print(coordinates_1, coordinates_2)
 
         if (abs(coordinates_1[0]-coordinates_2[0]) == 1
-            and abs(coordinates_1[1]-coordinates_2[1]) == 1):
+                and abs(coordinates_1[1]-coordinates_2[1]) == 1):
             #        print("these are diagonally 1 distance away")
             keyboard_distance = 1
 
@@ -55,6 +58,7 @@ class DistanceHeuristics:
 
         return keyboard_distance
 
+    # laitettu niin, että lasketaan kerran
     def calculate_all_distances_between_characters(self):
         """Method returns the absolute distances in keyboard between all different characters
         as a list. It excludes the distances when they are zero, i.e. the characters are the same.
@@ -83,9 +87,6 @@ class DistanceHeuristics:
         for distance in all_distances:
             only_distances.append(distance[0])
 
-#        print(only_distances)
-    #    print(statistics.median(map(float, only_distances)))
-
         return statistics.median(only_distances)
 
     def calculate_distance_heuristic_for_characters_keyboard_only(self, character_1, character_2):
@@ -96,9 +97,16 @@ class DistanceHeuristics:
             character_1 (_type_): _description_
             character_2 (_type_): _description_
         """
-        median_keyboard_distance = self.median_for_all_keyboard_distances()
-#        print(median_keyboard_distance)
         absolute_distance = self.calculate_keyboard_distance_for_characters(
             character_1, character_2)
-        distance_heuristic = absolute_distance / median_keyboard_distance
+        distance_heuristic = absolute_distance / self.median_for_distances
         return distance_heuristic
+
+    def distance_heuristic_always_the_same(self, character_1, character_2):
+        if character_1 == character_2:
+            return 0
+        else:
+            return 1
+
+
+distance_heuristics = DistanceHeuristics()

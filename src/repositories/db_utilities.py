@@ -35,7 +35,7 @@ class EnglishDictionary:
         words_frequencies_dictionary = json.load(open(self.file_name, 'r'))
 
         for key, value in words_frequencies_dictionary.items():
-        #    print(f"{key}: {value}")
+            #    print(f"{key}: {value}")
             self.words_in_original_dictionary += 1
             self.frequencies_in_original_dictionary += value
             word = str(key)
