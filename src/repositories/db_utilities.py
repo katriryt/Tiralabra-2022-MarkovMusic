@@ -44,9 +44,8 @@ class EnglishDictionary:
                 self.words_in_trie += 1
                 self.frequencies_in_trie += value
 
-        print(f"""original dictionary. Words: {self.words_in_original_dictionary}
-                and frequencies: {self.frequencies_in_original_dictionary}""")
-        print(f"trie. Words: {self.words_in_trie} and frequencies: {self.frequencies_in_trie}")
+#        print(f"Original dictionary. Words: {self.words_in_original_dictionary} and frequencies: {self.frequencies_in_original_dictionary}")
+#        print(f"Trie. Words: {self.words_in_trie} and frequencies: {self.frequencies_in_trie}")
 
 
 english_dictionary = EnglishDictionary()

@@ -27,6 +27,10 @@ class SpellCheck:
         self.trie = trie
         self.dictionary = dictionary
 
+    def convert_original_user_input_as_list(self, user_input):
+        original_user_input_as_list = user_input.split()
+        return original_user_input_as_list
+
     def convert_user_input_as_list(self, user_input):
         """Method converts given user input into a list of strings in lower case,
         splitting the user input to words at empty spaces and different punctuation marks.
