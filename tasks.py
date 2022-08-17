@@ -9,6 +9,10 @@ def test(ctx):
     ctx.run("poetry run pytest src")
 
 @task
+def relevance_test(ctx):
+    ctx.run("python src/relevance_test_index.py")
+
+@task
 def coverage_report(ctx):
     ctx.run("poetry run coverage run --branch -m pytest")
     ctx.run("poetry run coverage report -m")
