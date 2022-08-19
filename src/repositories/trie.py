@@ -28,7 +28,7 @@ class TrieNode:
 
 class Trie:
     """Class creates the overall trie structure and provides
-    the key operations (insertion and searching)."""
+    the key operations (insertion and searching) to access it."""
 
     def __init__(self):
         """ Method initializes the trie data structure (tree).

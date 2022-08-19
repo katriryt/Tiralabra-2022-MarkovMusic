@@ -4,7 +4,8 @@ from repositories.trie import trie as default_trie
 
 
 class EnglishDictionary:
-    """Class populates the spellchecker's trie data structure with
+    """Class fetches words used in the application's dictionary, and 
+        populates the spellchecker's trie data structure with
         English words and their frequencies.
     """
 

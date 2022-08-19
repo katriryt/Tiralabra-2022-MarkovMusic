@@ -3,8 +3,8 @@ from services.spell_check import SpellCheck
 
 
 class UI:
-    """Class starts the application and provides methods for interacting
-    with the user.
+    """Class provides methods for interaction with the user, and calls
+    for the relevant methods from the Spellcheck class.
     """
 
     def __init__(self):

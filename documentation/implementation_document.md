@@ -2,7 +2,30 @@
 
 ## Project structure
 
-Overall program structure with high level architectural pictures to be added. 
+### Overview
+
+Application has three layers: presentation tier (UI), logic tier (services) and data tier (repositories). Code is packaged as follows:
+
+![](./pictures/architecture_package_classes.png)
+
+__ui__, __services__, and __repositories__ include code for the user interface, application's core functionalities, and storage and handling of data, respectively.
+
+### User interface (UI)
+
+User interface is very simple. It consists of one class, [UI](../src/ui/ui.py), that is responsible for interacting with the user, and calls for relevant methods from the Spellcheck class.
+
+### Services
+
+Services provide the application's core functionalities of checking whether the word(s) given by the user are English, and if they are not, suggesting English words based on different distance metrics and heuristics. It consists of two classes:
+* Class [SpellCheck](../src/services/spell_check.py) provides core functionalities for spellchecking using different algorithms. It suggests (0) words generated with a one Damerau-Levenshtein distance (simplistic approach), and words selected from all the English words in the application's dictionary based on a distance metric calculated by (1) Levenshtein distance, (2) Optimal string alignment distance, and (3) full Damerau-Levenshtein distance, while taking into account the frequency of using the word in English texts.
+* Class [DistanceHeuristics](../src/services/heuristics.py) provides methods to calculate distance heuristic between two characters in a keyboard. It is used by the [SpellCheck](../src/services/spell_check.py) in calculation of the distance metric.
+
+### Repositories
+
+Repositories provide the following services for the logic tier:  
+* Class [EnglishDictionary](../src/repositories/db_utilities.py) is responsible for fetching words used in the application's dictionary, and populating the spellchecker's trie data structure with English words and their frequencies.
+* Class [Trie](../src/repositories/trie.py) is responsible for creating the overall data trie structure, and provides the key operations (insertion and searching) to access the data structure.
+* Class [TrieNode](../src/repositories/trie.py) is responsible for creating one node in the trie data structure.
 
 ## Implemented time and space complexities
 
@@ -12,37 +35,38 @@ Please note that as the project is not focused on applications' performance, com
 
 ## Possible flaws and improvements
 
-Possible flaws and ideas for improvements and further development areas to be added.
+There are a number of areas of improvement in the application. 
+* Completeness of the dictionary: Baseline database consists of ~150,000 words, but it does not consistently include e.g. different conjugations of the words. As a result, such simple words as 'is' or 'this' are not recognized as English. These limitations could be alleviated by e.g. using the British National Corpus as baseline for dictionary (currently not possible due to copyright reasons), or enabling user to add their own words to the dictionary. 
+* Limitations in handling special characters: Application handles inputs only for English alphabet characters (Aa-Zz); all punctionation marks are excluded. As a result, such phrase as 'John's dictionary' would only recognize 'dictionary' as English word. Limitation was done for the sake of simplicity, and expansion of the application is possible.
+* Availability of word frequencies: As British National Corpus data cannot be used as a basis for the dictionary due to copyright reasons, the usage frequencies for the words in the texts and matched with the Princeton University's WordNet dictionary's words. This results in a sizeable loss of frequency data. 
+* Speed and efficiency of the algorithm: The algorithms used in the application were coded to be explicit about every step of the distance calculation. As a result, no space or time efficiency improvements have been made, and when the word length increases, the application can seem fairly slow. Calculation of the Wagner-Fischer algorithm can be made more time efficient with certain optimizations. Also, making the reasonable assumption that the word's first character is correct, could speed-up the search of alternative words significantly. 
+* UI: Current UI is quite simplistic, as the focus of the work has been in the application's algorithms and data structures. Graphical UI for writing and editing the sentences could improve the visuals of the application notably.
 
 ## Sources
 
-Multiple sources of data, articles to understand the different algorithms, and examples for implementation of the algorithms have been used. Please find the most relevant below.
+Multiple sources of data, articles to understand the different algorithms, and examples for implementation of the algorithms have been used. Please find the most relevant sources below.
 
 ### Data
 
 Baseline for the **English language words** used in the application is provided by Princeton University's [WordNet](https://wordnet.princeton.edu/), which consists of ~150,000 commonly used English words. This application is developed complying with the [WordNet 3.0 license](https://wordnet.princeton.edu/license-and-commercial-use) that maintains the copyright with the Princeton University. Please see the copyright text below. 
 
-Frequencies for the words used in the application are based on analysis of texts in the [British National Corpus XML Edition](https://ota.bodleian.ox.ac.uk/repository/xmlui/handle/20.500.12024/2554), downloaded from the Oxford Text Archive. (Source: BNC Consortium, 2007, British National Corpus, XML edition, Oxford Text Archive, http://hdl.handle.net/20.500.12024/2554.) Use of this database is restricted and licensed under [BNC User Licence](http://www.natcorp.ox.ac.uk/docs/licence.html). As a result, no data directly from the database is shared here; only frequencies calculated based on the texts are used in this application. Similar analysis of data is available at [Wiktionary](https://en.wiktionary.org/wiki/Wiktionary:Frequency_lists). BNC containts texts with ~100,000,000 words from both written and spoken English from the beginning of the 1990s.
+**Usage frequencies** for the words used in the application are based on analysis of texts in the [British National Corpus XML Edition](https://ota.bodleian.ox.ac.uk/repository/xmlui/handle/20.500.12024/2554), downloaded from the Oxford Text Archive. (Source: BNC Consortium, 2007, British National Corpus, XML edition, Oxford Text Archive, http://hdl.handle.net/20.500.12024/2554.) British National Corpus containts texts with ~100,000,000 words from both written and spoken English from the beginning of the 1990s. Use of the database is restricted and licensed under [BNC User Licence](http://www.natcorp.ox.ac.uk/docs/licence.html). As a result, no data directly from the database is shared here; only frequencies calculated based on the texts are used in this application. Similar analysis of data is available at [Wiktionary](https://en.wiktionary.org/wiki/Wiktionary:Frequency_lists). 
 
-In total, this application's dictionary consists of ¨150,000 words. ~57,000 of these words have frequency data available; for the rest the frequency is assumed to be 1. When the full dictionary is limited only to words consisting of characters in the English alphabet, the application handles ~77,000 words on a continuous basis.
+In total, this application's dictionary consists of ¨150,000 words. ~57,000 of these words have frequency data available; for the rest of the words, the usage frequency is assumed to be 1. When the full dictionary is limited only to words consisting of characters in the English alphabet, the application handles ~77,000 words on a continuous basis.
 
-Sources for misspelled English words used in the automated tests to be added.
-
-### Distance metrics
-
-Approach for calculating the distance metrics follows [Damerau (1964)](https://dl.acm.org/doi/abs/10.1145/363958.363994). There are a few minor differences, though. For example, while Damerau(1964) limits the spellchecking to words longer than 3 characters, and checks only high occurrency words from the dictionary for words with 4-6 characters, no such limitations are needed here, as computer's calculation power is nowadays higher. 
-
-In the implementation, multiple sources have been studied. The most important have been: [Wikipedia: Damerau-Levenhstein distance (2022)](https://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance)), [Wikipedia: Wagner-Fischer algorithm article (2022)](https://en.wikipedia.org/wiki/Wagner%E2%80%93Fischer_algorithm)), [Wikipedia: Levenshtein distance (2022)](https://en.wikipedia.org/wiki/Levenshtein_distance), and examples of distance metrics calculation and implementation from [Jensen (2022)](https://www.lemoda.net/text-fuzzy/damerau-levenshtein/index.html), [Grashchenko (2021)](https://www.baeldung.com/cs/levenshtein-distance-computation), and [Norvig (2016)](http://norvig.com/spell-correct.html).
-
-In the keyboard heuristics, QWERTY US keyboard is used as the baseline keyboard, because QWERTY is the most widespread layout in use (source: [Wikipedia: QWERTY, (2022)](https://en.wikipedia.org/wiki/QWERTY). US variant is used, because there is no need for regional variants (only English alphabets are allowed in the application). Examples to consider keyboard distances was provided by [Burton, 2002](https://metacpan.org/pod/String::KeyboardDistance).
+During application's **relevance tests**, data from Wikipedia's [list of common misspelled English words](https://en.wikipedia.org/wiki/Wikipedia:Lists_of_common_misspellings/For_machines) was used. Testing was limited to words consisting of English alphabets, e.g. no special characters were allowed. Also the aforementioned Princeton University's [WordNet](https://wordnet.princeton.edu/) data was used is testing. 
 
 ### Trie data structure
 
-Comments to be added.
+Trie data structure and its implementation are quite well documented. In the development, especially the following sources were considered useful: [Wikipedia: Trie, 2022](https://en.wikipedia.org/wiki/Trie), [AskPython, 2022](https://www.askpython.com/python/examples/trie-data-structure), and [Yeung, 2020](https://albertauyeung.github.io/2020/06/15/python-trie.html/). The theoretical background was provided by [de la Briandais (1959)](https://dl.acm.org/doi/pdf/10.1145/1457838.1457895) and [Fredkin (1960)](https://dl.acm.org/doi/10.1145/367390.367400).
 
-### Other
+### Distance metrics
 
-Comments to be added.
+Approach for calculating the **distance metrics** follows [Damerau (1964)](https://dl.acm.org/doi/abs/10.1145/363958.363994). There are a few minor differences, though. For example, while Damerau(1964) limits the spellchecking to words longer than 3 characters, and checks only high occurrency words from the dictionary for words with 4-6 characters, no such limitations are needed here, as computer's calculation power is nowadays higher. 
+
+In the implementation, multiple sources have been studied. The most important have been: [Wikipedia: Damerau-Levenhstein distance (2022)](https://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance), [Wikipedia: Wagner-Fischer algorithm article (2022)](https://en.wikipedia.org/wiki/Wagner%E2%80%93Fischer_algorithm), [Wikipedia: Levenshtein distance (2022)](https://en.wikipedia.org/wiki/Levenshtein_distance), and examples of distance metrics calculation and implementation from [Jensen (2022)](https://www.lemoda.net/text-fuzzy/damerau-levenshtein/index.html), [Grashchenko (2021)](https://www.baeldung.com/cs/levenshtein-distance-computation), and [Norvig (2016)](http://norvig.com/spell-correct.html).
+
+In the **keyboard heuristics**, QWERTY US keyboard is used as the baseline keyboard, because QWERTY is the most widespread layout in use (source: [Wikipedia: QWERTY, (2022)](https://en.wikipedia.org/wiki/QWERTY)). US variant is used, because there is no need for regional variants (only English alphabets are allowed in the application). Examples on how to consider keyboard distances was provided by [Burton, 2002](https://metacpan.org/pod/String::KeyboardDistance).
 
 ### Key licenses
 

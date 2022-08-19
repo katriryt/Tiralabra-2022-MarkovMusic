@@ -5,12 +5,12 @@ import statistics
 
 class DistanceHeuristics:
     """Class provides methods to calculate distance heuristic between two
-    characters in a keyboard (and later also between two words).
+    characters in a keyboard.
     """
 
     def __init__(self):
         """Method sets up basic assumptions for the distance heuristic calculations,
-        incl. QQWERTY US keyboard (only for alphabets).
+        incl. QWERTY US keyboard (only for alphabets).
 
         """
         self.keyboard_matrix = [["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
