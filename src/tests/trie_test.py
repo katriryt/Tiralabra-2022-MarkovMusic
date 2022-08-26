@@ -10,8 +10,7 @@ class TestTrie(unittest.TestCase):
         word_tested = "ability"
         self.test_trie.insert_nodes(word_tested)
         answer = self.test_trie.search_if_word_in_trie(word_tested)
-        wanted_answer = True
-        self.assertEqual(answer, wanted_answer)
+        self.assertTrue(answer)
 
     def test_insert_nodes_with_frequency(self):
         word_tested = "new_test_word"
@@ -36,8 +35,7 @@ class TestTrie(unittest.TestCase):
         self.test_trie.insert_multiple_words_in_trie(word_list)
         test_word = "nomimono"
         answer = self.test_trie.search_if_word_in_trie(test_word)
-        wanted_answer = False
-        self.assertEqual(answer, wanted_answer)
+        self.assertFalse(answer)
 
     def test_search_words_starting_with(self):
         word_list = ["abandon", "ability", "able", "about", "ab"]
@@ -49,8 +47,7 @@ class TestTrie(unittest.TestCase):
     def test_search_word_full_data_false(self):
         word_tested = "word_not_found"
         output = self.test_trie.search_word_full_data(word_tested)
-        wanted_answer = False
-        self.assertEqual(output, wanted_answer)
+        self.assertFalse(output)
 
     def test_insert_multiple_words_with_word_count_in_trie(self):
         word_list_with_count = [("abandon", 300), ("ability", 4),
@@ -85,7 +82,7 @@ class TestTrie(unittest.TestCase):
         original_word_length = 5
         response = self.test_trie.get_all_words(True, original_word_length)
         wanted_answer = 5
-        self.assertEqual(len(response), 5)
+        self.assertEqual(len(response), wanted_answer)
 
     def test_get_all_words_length_not_available(self):
         word_list = ["abandon", "ability", "able", "about",

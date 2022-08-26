@@ -9,5 +9,6 @@ class Main:
     test_set.calculate_result_frequencies()
     test_set.calculate_result_top_1_frequencies()
 
+
 if __name__ == "__main__":
     relevance_testing = Main()

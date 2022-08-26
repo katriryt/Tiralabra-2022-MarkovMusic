@@ -11,15 +11,13 @@ class TestSpellCheck(unittest.TestCase):
         test_word = "mwm"
         output = self.check_spelling.word_contains_only_english_characters(
             test_word)
-        wanted_answer = True
-        self.assertEqual(output, wanted_answer)
+        self.assertTrue(output)
 
     def test_word_contains_only_english_characters_false(self):
         test_word = "mäm"
         output = self.check_spelling.word_contains_only_english_characters(
             test_word)
-        wanted_answer = False
-        self.assertEqual(output, wanted_answer)
+        self.assertFalse(output)
 
     def test_convert_original_user_input_as_list(self):
         user_input = "Mom! BUI123 sur.prise"
@@ -43,14 +41,12 @@ class TestSpellCheck(unittest.TestCase):
     def test_is_word_english_true(self):
         user_input = "mom"
         output = self.check_spelling.is_word_english(user_input)
-        wanted_answer = True
-        self.assertEqual(output, wanted_answer)
+        self.assertTrue(output)
 
     def test_is_word_english_false(self):
         user_input = "nomimono"
         output = self.check_spelling.is_word_english(user_input)
-        wanted_answer = False
-        self.assertEqual(output, wanted_answer)
+        self.assertFalse(output)
 
     def test_alternative_words_with_one_distance(self):
         user_input = "mom"
@@ -117,7 +113,6 @@ class TestSpellCheck(unittest.TestCase):
             test_user_word_1, test_dictionary_word, weighting_used)
         output_2 = self.check_spelling.calculate_levenshtein_distance(
             test_user_word_2, test_dictionary_word, weighting_used)
-        print(output_1, output_2)
         self.assertTrue(output_1 < output_2)
 
     def test_suggest_words_based_on_distance(self):

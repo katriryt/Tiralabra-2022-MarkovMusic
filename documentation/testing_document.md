@@ -103,6 +103,24 @@ It is important to note that though the test results above indicate that the app
 
 In line with the project specification, tests for application's performance (e.g. how quickly the different metrics can suggest spellchecked words) are not conducted. Focus of the work was not in the application's efficiency, but in the accuracy. However, during the relevance testing, it was noted that when the misspelled words are long, the application seems quite slow.
 
-## Remaining quality errors
+## Quality
 
-Pylint and autopep8 are used to help identifying and correcting for quality errors.
+Pylint and autopep8 are used to help identifying and correcting for quality errors. Please see the relevant commands below.
+
+### Pylint
+
+Checks as defined by .pylintrc can be implemented with the following command: 
+```bash
+poetry run invoke lint
+```
+
+### autopep8 formatting
+
+Formats code according to pep8 standard: 
+```bash
+poetry run invoke format
+```
+
+### Remaining quality errors
+
+A few issues highlighted by pylint have been left in the code, such as docstring has not been added in constructors whose purpose is self evident. Also in a few instances, the 'less elegant' implementations have been left in the code, in order to make it extremely explicit for the developer / reviewer. 
