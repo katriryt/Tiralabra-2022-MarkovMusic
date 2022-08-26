@@ -4,13 +4,12 @@ from services.spell_check import SpellCheck
 
 class UI:
     """Class provides methods for interaction with the user, and calls
-    for the relevant methods from the Spellcheck class.
+    for the relevant methods from the SpellCheck class.
     """
 
     def __init__(self):
         """Method initiates the UI class. 
         """
-#        print("initiating ui class")
         self.spell_checking_continues = True
         self.exit_checking_continues = True
         self.check_skipping_continues = True
@@ -26,16 +25,21 @@ class UI:
         """
         print("\nPlease type in a word or a phrase to be checked: ")
         user_input = str(input("Your text: "))
-        # print(user_input)
         self.full_original_user_input = self.check_spelling.convert_original_user_input_as_list(
             user_input)
-#        print(self.full_original_user_input)
         self.user_input_as_list = self.check_spelling.convert_user_input_as_list(
             user_input)
-#        print(self.user_input_as_list)
         print("")
 
     def check_if_skip_spell_checking(self, word):
+        """Method requests from user input on whether the spell checking for
+        an identified misspelled word is to be skipped. This would make sense, if
+        the word is a common English word, such as 'this' that the dictionary 
+        does not contain and hence identify as English word.
+
+        Args:
+            word (string): Word that has not been identified from the dictionary.
+        """
         while self.check_skipping_continues is True:
             print(
                 f"Your word: '{word}' is not found from the English dictionary.\n")
@@ -61,8 +65,6 @@ class UI:
             print(
                 "\nTo identify the misspelled word, would you like to use more advanced methods (heuristics)?")
             print("Select action: \n1 Yes \n2 No")
-#            user_weighting_input = input(
-#                "Would you like to use more advanced methods (weighting distance metrics) to identify your word? Press 1 if yes, and 2 if no:")
             user_weighting_input = input("Action: ")
             if user_weighting_input == "1":
                 self.weighting_used = True
@@ -80,8 +82,6 @@ class UI:
         while self.exit_checking_continues is True:
             print("Would you like to spell check another word or phrase?")
             print("Select action: \n1 Yes\n2 No, please exit")
-#            user_recheck_input = input(
-#                "Would you like to spell check another phrase? Press 1 if yes, and 2 if you would like to exit:")
             user_recheck_input = input("Action: ")
 
             if user_recheck_input == "2":
@@ -114,8 +114,6 @@ class UI:
                         f"Please note that your word '{word}' contains non-English alphabet and cannot be checked.\n")
                 else:
                     self.check_if_skip_spell_checking(word)
-#                    print(
-#                        f"Your word: '{word}' is not found from the English dictionary.\n")
                     if self.skip_word is False:
                         self.check_if_weighting_is_used()
                         print(

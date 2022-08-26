@@ -5,6 +5,8 @@ from services.spell_check import SpellCheck
 
 
 class RelevanceTests():
+    """Purpose of this class is to define and conduct the relevance tests.
+    """
     def __init__(self):
         """Method initiates the relevance test class. 
         Test word lists consist of tuples in the format of (wrong_word, right_word).
@@ -25,7 +27,6 @@ class RelevanceTests():
         Princeton University's dictionary words, with one random mistake: relevance_test_random_test_words.txt
         Princeton University's dictionary words, with two random mistakes: relevance_test_random_test_words2.txt
         """
-#        print("getting file location")
         script_location = Path(__file__).absolute().parent
 #        print(script_location)
         file_location = script_location/"relevance_test_random_test_words2.txt"
@@ -62,10 +63,7 @@ class RelevanceTests():
     def get_subset_of_test_words(self):
         """Method limits the number of test words, and picks a random selection among the alternative test words.
         """
-#        wanted_number_of_test_words = 2
-#        self.test_words = self.all_test_words
-#        self.test_words = random.choices(self.all_test_words, k=wanted_number_of_test_words) # voi tulla duplikaatteja
-        self.test_words = random.sample(self.all_test_words, k=self.number_of_test_words) # ei tule duplikaatteja tai toistoa
+        self.test_words = random.sample(self.all_test_words, k=self.number_of_test_words)
         print(self.test_words)
         print(len(self.test_words))
 
@@ -77,9 +75,7 @@ class RelevanceTests():
             method (integer): Defines the test method: 1 for Levenshtein distance, 2 for Optimal string alignment, and 3 for Damerau-Levenshtein distance.
             weighting (Boolen): False value indicates that no weighting is to be used in the distance metric, True indicates that weighting in heuristics is to be used.
         """
-#        print(f"getting suggestion for word: {test_word}, method: {method}, weighting: {weighting}")
         suggestions = self.check_spelling.suggest_words_based_on_distance(test_word, method, weighting)
-#        print(suggestion)
         suggested_words = []
         for item in suggestions:
             suggested_words.append(item[0])

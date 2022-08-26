@@ -11,7 +11,7 @@ class TrieNode:
         Args:
             given_character (string): Node is given a string of character.
         """
-#        print("trie-noodin konstruktorissa")
+
         self.character = given_character
         self.node_is_end_of_word = False
         self.children = {}
@@ -20,9 +20,8 @@ class TrieNode:
         self.word_length = 0
 
     def __repr__(self):
-        # node_content = f"Character is {self.character}, end of word is:
-        # {self.node_is_end_of_word} and children are {self.children.keys()}"
-        # return node_content
+        """ Method supports printing one node.
+        """
         return f"{self.character}"
 
 
@@ -33,7 +32,6 @@ class Trie:
     def __init__(self):
         """ Method initializes the trie data structure (tree).
         """
-#        print("alustaa trie-puuta")
         self.root = TrieNode("")
         self.all_words = []
 
@@ -52,14 +50,11 @@ class Trie:
 
         for character in word:
             if character in node.children:
-                # print(f"character {character} is already among the node's children")
                 node = node.children[character]
             else:
-                # print(f"character {character} is not among the node's children")
                 new_node = TrieNode(character)
                 node.children[character] = new_node
                 node = new_node
-                # print(f"Insertion continues along the new node {node}")
 
         node.node_is_end_of_word = True
         node.word_in_node = word
@@ -77,33 +72,23 @@ class Trie:
             original_word_length (int, optional): Integer indicating the length of the
             original word typed by the user. Defaults to None.
         """
-#        print(f"selecting word, node is {node.word_in_node}")
         accepted_distance_from_original_word = 1
 
         if original_word_length is None:
-            #            print(f"length does not matter")
             if data_wanted is False:
-                #                print("selecting word, lisäämässä sanaa listalle")
                 self.all_words.append(node.word_in_node)
             else:
-                #                print("selecting word, lisäämässä kaikkea tietoa listalle")
                 self.all_words.append(
                     (node.node_is_end_of_word, node.word_in_node, node.word_count,
                      node.word_length))
 
         elif (original_word_length is not None) and ((node.word_length == original_word_length) or (node.word_length == original_word_length+accepted_distance_from_original_word) or (node.word_length == original_word_length-accepted_distance_from_original_word)):
-            #            print(f"length within parameters {accepted_distance_from_original_word}")
             if data_wanted is False:
-                #                print("selecting word, lisäämässä sanaa listalle")
                 self.all_words.append(node.word_in_node)
             else:
-                #                print("selecting word, lisäämässä kaikkea tietoa listalle")
                 self.all_words.append(
                     (node.node_is_end_of_word, node.word_in_node, node.word_count,
                      node.word_length))
-
-#        else:
-#            print("requirements not met")
 
     def depth_first_search(self, node, previous_node, data_wanted=False, original_word_length=None):
         """Method is the basic depth first search, targeting to find the end nodes in the
@@ -119,14 +104,10 @@ class Trie:
             original word typed by the user. Defaults to None.
         """
         if node.node_is_end_of_word is True:
-            # when frequency values are added to the tree, change what is returned here
-            #            print(f"last node is reached, data wanted is {data_wanted}")
             self.output.append((previous_node + node.character))
             self.select_word_for_list(node, data_wanted, original_word_length)
 
         for child in node.children.values():
-            # print(
-            #    f"ei olla vielä lopussa, ollaan noden lapsessa {child}, jatketaan syvyyshakua")
             self.depth_first_search(
                 child, previous_node + node.character, data_wanted, original_word_length)
 
@@ -146,9 +127,6 @@ class Trie:
         Returns:
             _type_: _description_
         """
-#        print(f"searching words starting with a character, data wanted is {data_wanted}")
-        # name previously: search_alternative_spellings_for_word
-        # print(f"searching for string: {given_string}")
         node = self.root
         for character in given_string:
             if character in node.children:
@@ -173,14 +151,12 @@ class Trie:
             original_word_length (int, optional): Integer indicating the length of the
             original word typed by the user. Defaults to None.
         """
-#        print(f"get all words, data_wanted is {data_wanted}")
         self.all_words = []
         word_starts = string.ascii_lowercase
         for word_prefix in word_starts:
             self.search_words_starting_with(
                 word_prefix, data_wanted, original_word_length)
-#            print(self.output)
-#        print(self.output)
+
         return self.all_words
 
     def search_if_word_in_trie(self, word):
@@ -194,7 +170,7 @@ class Trie:
             Boolean: Method returns a Boolean value whether the given word is
             in the trie structure (True) or not (False).
         """
-#        print(f"etsimässä {word}")
+
         node = self.root
         for character in word:
             if character in node.children:
@@ -214,7 +190,6 @@ class Trie:
             Boolean value or tuple: Method returns a Boolean value if the word is
             not in trie, or a tuple consisting of word's related characteristics.
         """
-#        print(f"etsimässä tietoa: {word}")
         node = self.root
         for character in word:
             if character in node.children:
@@ -241,7 +216,6 @@ class Trie:
             and frequency number (integer).
         """
         for item in given_list:
-            #            print(item)
             self.insert_nodes(item[0], item[1])
 
 
