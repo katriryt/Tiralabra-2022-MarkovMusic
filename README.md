@@ -24,3 +24,4 @@ The purpose of this project is to practice implemention of more advanced data st
 * [Week 3](./documentation/weekly_report_week_3.md)
 * [Week 4](./documentation/weekly_report_week_4.md)
 * [Week 5](./documentation/weekly_report_week_5.md)
+* [Week 6](./documentation/weekly_report_week_6.md)

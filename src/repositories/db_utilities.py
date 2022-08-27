@@ -14,7 +14,7 @@ class EnglishDictionary:
         the key methods in the class.
 
         Args:
-            trie (Class, optional): Class for the trie data structure. 
+            trie (Class, optional): Class for the trie data structure.
             Defaults to default_trie.
         """
         self.trie = trie

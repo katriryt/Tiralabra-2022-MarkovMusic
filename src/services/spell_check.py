@@ -49,7 +49,7 @@ class SpellCheck:
         return True
 
     def convert_original_user_input_as_list(self, user_input):
-        """Method converts the given user input into a list of strings, 
+        """Method converts the given user input into a list of strings,
         split based on empty spaces.
 
         Args:
