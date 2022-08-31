@@ -29,7 +29,7 @@ class RelevanceTests():
         """
         script_location = Path(__file__).absolute().parent
 #        print(script_location)
-        file_location = script_location/"relevance_test_random_test_words2.txt"
+        file_location = script_location/"relevance_test_right_wrong_words.txt"
         print(file_location)
         return file_location
 

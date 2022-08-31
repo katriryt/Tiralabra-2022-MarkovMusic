@@ -143,6 +143,8 @@ class UI:
                     print("")
                     self.check_skipping_continues = True
                     self.skip_word = False
+                    self.weighting_checking_continues = True
+                    self.weighting_used = False
 
         self.exit_checking_continues = True
         self.weighting_checking_continues = True
