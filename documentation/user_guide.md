@@ -35,7 +35,7 @@ Once the application is started, the user is asked to type in text (a phrase or 
 
 ![](./pictures/ug_start.png)
 
-Application accepts only English alphabets Aa-Zz as inputs. If the user types in e.g. Scandinavian characters, the application gives an error message and will not handle the word with the non-English characters. If punction marks, such as question mark, exclamation point, point, or comma are typed in, the application assumes that these indicate an ending for a particular word, and will handle the rest of the word as (misspelled) English word. 
+Application accepts only English alphabets Aa-Zz as inputs. If the user types in e.g. Scandinavian characters, the application gives an error message and will not handle the word with the non-English characters. If punctuation marks, such as a question mark, an exclamation point, a point, or a comma are typed in, the application assumes that these indicate an ending for a particular word, and will handle the rest of the word as (misspelled) English word. 
 
 ### Checking the spelling
 
@@ -43,7 +43,7 @@ The application handles the users' input one word at a time. First, the applicat
 
 ![](./pictures/ug_skip_word.png)
 
-If the word is not found from the dictionary, the user is asked whether they want to check its spelling or skip it. If the word is to be skipped, the application starts to check the following word on the phrase. 
+If the word is not found from the dictionary, the user is asked whether they want to check its spelling or skip it. If the word is to be skipped, the application starts to check the following word in the phrase. 
 
 The application also asks the user whether more advanced methods, essentially keyboard heuristics, are to be used to develop relevant suggestions for the misspelled word. 
 
