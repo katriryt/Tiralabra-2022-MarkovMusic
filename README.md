@@ -26,3 +26,7 @@ The purpose of this project is to practice implemention of more advanced data st
 * [Week 5](./documentation/weekly_report_week_5.md)
 * [Week 6](./documentation/weekly_report_week_6.md)
 * [Week 7](./documentation/weekly_report_week_7.md)
+
+## Release
+
+Get the latest [release](https://github.com/katriryt/Tiralabra-2022-VerbumReprehendo/releases/tag/v1.0.0) for the application.
