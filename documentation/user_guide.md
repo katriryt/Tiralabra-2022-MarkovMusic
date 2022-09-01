@@ -17,7 +17,8 @@ poetry install
 Start the application with the following command in Windows: 
 
 ```bash
-python src/index.py
+poetry shell
+python src\index.py
 ```
 Please use the following command in Linux:
 
